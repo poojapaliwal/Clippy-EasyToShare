@@ -84,6 +84,10 @@ router.post("/register",async (request,response)=>{
                                 password:request.body.password});
 
                             let finalnewuser = await newuser.save();
+                                newuser.password = "" // Clearing Password Field
+                            var token = jwt.sign({ ...newuser }, SECRETKEY, {
+                                expiresIn: 86400 // expires in 24 hours
+                              });
                             response.status(200).json(finalnewuser); 
                         }else{
                             if(Number(dataFromRequest) === 1){

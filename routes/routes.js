@@ -88,7 +88,7 @@ router.post("/register",async (request,response)=>{
                             var token = jwt.sign({ ...newuser }, SECRETKEY, {
                                 expiresIn: 86400 // expires in 24 hours
                               });
-                            response.status(200).json(finalnewuser); 
+                            response.status(200).json({jwtToken:token,user:finalnewuser}); 
                         }else{
                             if(Number(dataFromRequest) === 1){
                                 let userFromDataBase = await UserModel.findOne({email:emailValue}).exec();

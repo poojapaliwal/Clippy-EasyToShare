@@ -2,6 +2,10 @@ const express = require("express")
 const router = express.Router();
 const mongoose = require("mongoose");
 let UserModel = require("./../models/user");
+let {SECRETKEY} = require("./../settings/config");
+
+var jwt = require('jsonwebtoken');
+var bcrypt = require('bcryptjs');
 
 
 class Error{
@@ -58,9 +62,10 @@ router.post("/register",async (request,response)=>{
             // request.headers["access-control-request-headers"]
         if((typeof request == "object") && ('body' in request)){
             
-            if('email' in request.body){
+            if('email' in request.body && 'password' in request.body){
                 let emailRegex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
                 let emailValue = String(request.body.email);
+                let passwordValue = String(request.body.password);
                 if(emailRegex.test(emailValue) === true){
 
                         let dataFromRequest = await UserModel.countDocuments({ email: emailValue }).exec();
@@ -75,12 +80,33 @@ router.post("/register",async (request,response)=>{
                                 contacts:["String"],
                                 lastLoginTime:new Date(),
                                 lastSeen:"String",
-                                status:"String"});
+                                status:"String",
+                                password:request.body.password});
 
                             let finalnewuser = await newuser.save();
                             response.status(200).json(finalnewuser); 
                         }else{
-                            throw new Error(303,"Email Already Registered !")
+                            if(Number(dataFromRequest) === 1){
+                                let userFromDataBase = await UserModel.findOne({email:emailValue}).exec();
+                                // console.log(userFromDataBase)
+                                if(userFromDataBase.password == passwordValue){
+                                    // Password Valid
+                                    userFromDataBase.password = "";
+                                    // console.log
+                                    var token = jwt.sign({ ...userFromDataBase }, SECRETKEY, {
+                                        expiresIn: 86400 // expires in 24 hours
+                                      });
+                                    response.status(200).json({jwtToken:token,user:userFromDataBase});
+
+                                }else{
+                                    // Invalid Password
+                                    throw new Error(302,"Incorrect Password")
+                                }
+
+
+                            }else{
+                                throw new Error(303,"Mutiple Objects with same Email Address Found !!")
+                            }
                         }
 
                 }else{
@@ -96,7 +122,8 @@ router.post("/register",async (request,response)=>{
             throw new Error(401,"Incorrect JSON Body")
         }
     }catch(error){
-        response.status(error.code).send(error);
+        console.log(error)
+        response.status(error.code ? error.code : 400).send(error);
     }
 })
 

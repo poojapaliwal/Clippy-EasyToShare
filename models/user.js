@@ -12,7 +12,8 @@ let UserSchema = new Schema({
     contacts:[String],
     lastLoginTime:String,
     lastSeen:String,
-    status:String
+    status:String,
+    password:String
 });
 
 const User = mongoose.model('users', UserSchema);

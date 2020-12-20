@@ -38,7 +38,7 @@ io.on('connection',socket=>{
 })
 // HTTP SERVER
 http.listen(PORT, () => {
-  console.log('HTTP Server Started on *:5000');
+  console.log('HTTP Server Started on *:',PORT);
 });
 
 

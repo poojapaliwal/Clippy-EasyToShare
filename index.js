@@ -28,6 +28,7 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
   console.log("Database Connected on MONGODB_URI:",MONGODB_URI);
 });
+io
 // Socket Connection
 io.on('connection',socket=>{
   
@@ -35,6 +36,11 @@ io.on('connection',socket=>{
   require("./Events/Messages/sendMessageEvent")(socket); // to Send Message Related Work
   require("./Events/setSocketID")(socket); // to Register socketID with Email
   require("./Events/getAllUsers")(socket); // to getAllUsers
+  
+
+  require("./Events/ClippySockets/setSocketsWithEmail")(socket,io);
+  require("./Events/ClippySockets/forwardMessagesToAll")(socket,io);
+  // require("./Events/ClippySockets/getAllSocketsOfEmail")(socket);
 })
 // HTTP SERVER
 http.listen(PORT, () => {

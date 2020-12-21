@@ -77,7 +77,7 @@ router.post("/register",async (request,response)=>{
                                 phone:0,
                                 email:emailValue,
                                 lastConnection:"defaultlastconnection",
-                                contacts:["String"],
+                                contacts:[],
                                 lastLoginTime:new Date(),
                                 lastSeen:"String",
                                 status:"String",

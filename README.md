@@ -2,8 +2,8 @@
 ## Hack InOut Submission
 ### Team Name - Promise Resolvers
 
-Member 1 - Pushpendra V. ( pushpendrahpx )
-Member 2 - Pooja Paliwal ( poojapaliwal )
+##### Member 1 - Pushpendra V. ( pushpendrahpx )
+##### Member 2 - Pooja Paliwal ( poojapaliwal )
 
 This Repository can be as submission for Hackathon InOut (2020), which includes our project Clippy-EasyToShare, which helps users to increase their productivity by easily sharing some files or small texts or links across multiple devices easily in minimum efforts
 

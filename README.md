@@ -15,6 +15,8 @@ Steps For Web Application Are Mentioned in the Above Repositories
 
 #### Requirements for Local Setup of Repository 
 1. MongoDB
+2. node.js
+3. npm
 
 #### Steps of Installation For Server (Locally) or Server Hosted is Available at [Here](https://shareable.tech)
 1. ``` npm install ``` on Root directory after cloning repository

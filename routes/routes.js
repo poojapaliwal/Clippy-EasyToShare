@@ -85,7 +85,7 @@ router.post("/register",async (request,response)=>{
 
                             let finalnewuser = await newuser.save();
                                 newuser.password = "" // Clearing Password Field
-                            var token = jwt.sign({ ...newuser }, SECRETKEY, {
+                            var token = jwt.sign({ email:newuser.email }, SECRETKEY, {
                                 expiresIn: 86400 // expires in 24 hours
                               });
                             response.status(200).json({jwtToken:token,user:finalnewuser}); 
@@ -97,7 +97,7 @@ router.post("/register",async (request,response)=>{
                                     // Password Valid
                                     userFromDataBase.password = "";
                                     // console.log
-                                    var token = jwt.sign({ ...userFromDataBase }, SECRETKEY, {
+                                    var token = jwt.sign({ email:userFromDataBase.email }, SECRETKEY, {
                                         expiresIn: 86400 // expires in 24 hours
                                       });
                                     response.status(200).json({jwtToken:token,user:userFromDataBase});
